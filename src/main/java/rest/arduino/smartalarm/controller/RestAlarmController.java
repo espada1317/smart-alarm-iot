@@ -43,7 +43,7 @@ public class RestAlarmController {
         return restAlarmService.getNextActiveAlarm();
     }
 
-    @PostMapping("/alarm")
+    @PostMapping("/alarms")
     public ResponseEntity<Alarm> saveAlarm(@RequestBody CreationAlarmDto creationAlarmDto) {
         return new ResponseEntity<>(restAlarmService.addAlarm(creationAlarmDto), HttpStatus.CREATED);
     }

@@ -1,11 +1,15 @@
 package rest.arduino.smartalarm.domain.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import rest.arduino.smartalarm.domain.deserializer.CustomDateTimeDeserializer;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,20 +19,7 @@ import lombok.ToString;
 @ToString
 public class CreationAlarmDto {
 
-    private String alarmTime;
-
-    private boolean isMondayRecurring;
-
-    private boolean isTuesdayRecurring;
-
-    private boolean isWednesdayRecurring;
-
-    private boolean isThursdayRecurring;
-
-    private boolean isFridayRecurring;
-
-    private boolean isSaturdayRecurring;
-
-    private boolean isSundayRecurring;
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+    private LocalDateTime alarmTime;
 
 }

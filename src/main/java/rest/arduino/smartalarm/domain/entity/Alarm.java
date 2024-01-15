@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +15,6 @@ import lombok.ToString;
 import rest.arduino.smartalarm.domain.enums.AlarmStatus;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -44,10 +41,6 @@ public class Alarm {
     private AlarmStatus status;
 
     @Column(name = "alarm_time", nullable = false)
-    private LocalTime alarmTime;
-
-    @ManyToOne
-    @JoinColumn(name = "id_recurring", referencedColumnName = "id")
-    private RecurringAlarm idRecurring;
+    private LocalDateTime alarmDateTime;
 
 }
