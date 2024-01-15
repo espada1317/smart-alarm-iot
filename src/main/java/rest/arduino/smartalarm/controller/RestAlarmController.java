@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rest.arduino.smartalarm.domain.dto.CreationAlarmDto;
+import rest.arduino.smartalarm.domain.dto.SensorValueDto;
 import rest.arduino.smartalarm.domain.entity.Alarm;
+import rest.arduino.smartalarm.domain.entity.PhotoSensor;
 import rest.arduino.smartalarm.service.RestAlarmService;
 
 import java.text.SimpleDateFormat;
@@ -43,9 +45,19 @@ public class RestAlarmController {
         return restAlarmService.getNextActiveAlarm();
     }
 
+    @GetMapping("/alarms/verify")
+    public Boolean verifyCurrentAlarm() {
+        return restAlarmService.verifyCurrentAlarm();
+    }
+
     @PostMapping("/alarms")
     public ResponseEntity<Alarm> saveAlarm(@RequestBody CreationAlarmDto creationAlarmDto) {
         return new ResponseEntity<>(restAlarmService.addAlarm(creationAlarmDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/sensors/photo")
+    public ResponseEntity<PhotoSensor> saveAlarm(@RequestBody SensorValueDto sensorValueDto) {
+        return new ResponseEntity<>(restAlarmService.addPhotoSensorValue(sensorValueDto), HttpStatus.CREATED);
     }
 
 }

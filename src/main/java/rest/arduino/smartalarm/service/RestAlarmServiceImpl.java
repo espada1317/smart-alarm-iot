@@ -3,12 +3,16 @@ package rest.arduino.smartalarm.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import rest.arduino.smartalarm.domain.dto.CreationAlarmDto;
+import rest.arduino.smartalarm.domain.dto.SensorValueDto;
 import rest.arduino.smartalarm.domain.entity.Alarm;
+import rest.arduino.smartalarm.domain.entity.PhotoSensor;
 import rest.arduino.smartalarm.domain.enums.AlarmStatus;
 import rest.arduino.smartalarm.domain.repository.AlarmRepository;
+import rest.arduino.smartalarm.domain.repository.PhotoSensorRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,6 +21,8 @@ import java.util.List;
 public class RestAlarmServiceImpl implements RestAlarmService {
 
     private final AlarmRepository alarmRepository;
+
+    private final PhotoSensorRepository photoSensorRepository;
 
     @Override
     public List<Alarm> getAllAlarms() {
@@ -43,9 +49,14 @@ public class RestAlarmServiceImpl implements RestAlarmService {
 
     @Override
     public Alarm getNextActiveAlarm() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
         return getAllAlarms().stream()
                 .filter(alarm -> alarm.getStatus().equals(AlarmStatus.ACTIVE))
-                .filter(alarm -> alarm.getAlarmDateTime().isAfter(LocalDateTime.now()))
+                .filter(alarm ->
+                        (alarm.getAlarmDateTime().toLocalDate().equals(LocalDate.now()) &&
+                                alarm.getAlarmDateTime().getHour() == currentDateTime.getHour() &&
+                                alarm.getAlarmDateTime().getMinute() == currentDateTime.getMinute()) || alarm.getAlarmDateTime().isAfter(currentDateTime))
                 .min(Comparator.comparing(Alarm::getAlarmDateTime,
                         Comparator.nullsLast(Comparator.naturalOrder())))
                 .orElse(null);
@@ -60,6 +71,29 @@ public class RestAlarmServiceImpl implements RestAlarmService {
         alarm.setAlarmDateTime(creationAlarmDto.getAlarmTime());
 
         return alarmRepository.save(alarm);
+    }
+
+    @Override
+    public PhotoSensor addPhotoSensorValue(SensorValueDto sensorValueDto) {
+        PhotoSensor photoSensor = new PhotoSensor();
+        photoSensor.setCreationTimestamp(LocalDateTime.now());
+        photoSensor.setValue(Integer.parseInt(sensorValueDto.getSensorValue().trim()));
+
+        return photoSensorRepository.save(photoSensor);
+    }
+
+    @Override
+    public Boolean verifyCurrentAlarm() {
+        LocalTime currentTime = LocalDateTime.now().toLocalTime();
+        LocalTime alarmTime = getNextActiveAlarm().getAlarmDateTime().toLocalTime();
+
+        int currentHour = currentTime.getHour();
+        int currentMinute = currentTime.getMinute();
+
+        int alarmHour = alarmTime.getHour();
+        int alarmMinute = alarmTime.getMinute();
+
+        return currentHour == alarmHour && currentMinute == alarmMinute;
     }
 
 }
