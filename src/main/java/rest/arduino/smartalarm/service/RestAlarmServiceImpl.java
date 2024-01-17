@@ -74,6 +74,19 @@ public class RestAlarmServiceImpl implements RestAlarmService {
     }
 
     @Override
+    public Alarm cancelCurrentAlarm() {
+        Alarm currentAlarm = getNextActiveAlarm();
+        if (currentAlarm.getAlarmDateTime().toLocalDate().equals(LocalDate.now())
+                && currentAlarm.getAlarmDateTime().toLocalTime().getHour() == LocalTime.now().getHour()
+                && currentAlarm.getAlarmDateTime().toLocalTime().getMinute() == LocalTime.now().getMinute()) {
+            currentAlarm.setStatus(AlarmStatus.DISABLED);
+            alarmRepository.save(currentAlarm);
+        }
+
+        return currentAlarm;
+    }
+
+    @Override
     public PhotoSensor addPhotoSensorValue(SensorValueDto sensorValueDto) {
         PhotoSensor photoSensor = new PhotoSensor();
         photoSensor.setCreationTimestamp(LocalDateTime.now());

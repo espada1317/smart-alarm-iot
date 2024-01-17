@@ -55,6 +55,11 @@ public class RestAlarmController {
         return new ResponseEntity<>(restAlarmService.addAlarm(creationAlarmDto), HttpStatus.CREATED);
     }
 
+    @GetMapping("/alarms/cancelCurrent")
+    public ResponseEntity<Alarm> cancelAlarm() {
+        return new ResponseEntity<>(restAlarmService.cancelCurrentAlarm(), HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping("/sensors/photo")
     public ResponseEntity<PhotoSensor> saveAlarm(@RequestBody SensorValueDto sensorValueDto) {
         return new ResponseEntity<>(restAlarmService.addPhotoSensorValue(sensorValueDto), HttpStatus.CREATED);
