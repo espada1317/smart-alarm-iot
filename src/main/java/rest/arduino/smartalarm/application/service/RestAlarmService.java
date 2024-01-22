@@ -1,4 +1,4 @@
-package rest.arduino.smartalarm.service;
+package rest.arduino.smartalarm.application.service;
 
 import rest.arduino.smartalarm.domain.dto.CreationAlarmDto;
 import rest.arduino.smartalarm.domain.dto.SensorValueDto;

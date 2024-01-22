@@ -12,7 +12,7 @@ import rest.arduino.smartalarm.domain.dto.CreationAlarmDto;
 import rest.arduino.smartalarm.domain.dto.SensorValueDto;
 import rest.arduino.smartalarm.domain.entity.Alarm;
 import rest.arduino.smartalarm.domain.entity.PhotoSensor;
-import rest.arduino.smartalarm.service.RestAlarmService;
+import rest.arduino.smartalarm.application.service.RestAlarmService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

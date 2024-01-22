@@ -14,43 +14,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import rest.arduino.smartalarm.domain.enums.AlarmStatus;
 
-import java.time.LocalDateTime;
-
+@Entity
+@Table(name = "smart_alarm_device")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
-
-@Entity
-@Table(name = "alarm")
-public class Alarm {
+@Builder
+public class SmartAlarmDevice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
+    @Column(nullable = false,
+            unique = true)
+    private String deviceMacId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "smart_alarm_device_id")
-    private SmartAlarmDevice smartAlarmDevice;
-
-    @Column(name = "creation_timestamp", nullable = false)
-    private LocalDateTime creationTimestamp;
-
-    @Column(name = "last_modified", nullable = false)
-    private LocalDateTime lastModified;
-
-    @Column(name = "status", nullable = false)
-    private AlarmStatus status;
-
-    @Column(name = "alarm_time", nullable = false)
-    private LocalDateTime alarmDateTime;
 
 }

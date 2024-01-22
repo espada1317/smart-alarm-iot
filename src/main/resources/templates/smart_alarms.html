@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Alarm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/smart_alarms.css}">
+</head>
+<body>
+
+<header th:insert="fragments/navbar :: navbar">
+</header>
+
+<div class="form-outline mb-1 container add-new-device">
+    <form method="POST" th:action="@{/smartAlarm/new}" th:object="${smartAlarmInfo}">
+        <p class="filename">
+            <input type="text" name="deviceMacId" class="finput">
+            <button type="submit" class="btn btn-primary submit-cancel">Register new SmartAlarm device</button>
+        </p>
+    </form>
+</div>
+
+<main role="main">
+    <div class="album py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3" th:each="smartAlarm: ${smartAlarmList}">
+                    <div class="card mb-1 box-shadow">
+                        <div class="card-body">
+                            <p class="card-text" th:text="${smartAlarm.deviceMacId}"></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-sm btn-outline-secondary btn-black"
+                                       th:ref="@{/smartAlarm/getById/{id}(id=${smartAlarm.id})}">View SmartAlarm</a>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-sm btn-outline-secondary btn-red"
+                                       th:ref="@{/smartAlarm/getById/{id}(id=${smartAlarm.id})}">Delete device</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+</body>
+</html>

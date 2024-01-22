@@ -1,4 +1,4 @@
-package rest.arduino.smartalarm.service;
+package rest.arduino.smartalarm.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
