@@ -10,8 +10,8 @@ import rest.arduino.smartalarm.domain.repository.SmartAlarmDeviceRepository;
 import rest.arduino.smartalarm.domain.repository.UserRepository;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class SmartAlarmDeviceServiceImpl implements SmartAlarmDeviceService {
             smartAlarmDevice.setUser(user);
             SmartAlarmDevice savedSmartAlarm = smartAlarmDeviceRepository.save(smartAlarmDevice);
 
-            Set<SmartAlarmDevice> smartAlarmDevices = user.getSmartAlarms();
+            List<SmartAlarmDevice> smartAlarmDevices = user.getSmartAlarms();
             smartAlarmDevices.add(savedSmartAlarm);
             user.setSmartAlarms(smartAlarmDevices);
 
@@ -44,7 +44,12 @@ public class SmartAlarmDeviceServiceImpl implements SmartAlarmDeviceService {
     }
 
     @Override
-    public Optional<SmartAlarmDevice> getDeviceByMacId(String deviceMacId) {
-        return Optional.empty();
+    public void deleteSmartAlarmDevice(Long deviceId) {
+        Optional<SmartAlarmDevice> smartAlarmDeviceOptional = smartAlarmDeviceRepository.findById(deviceId);
+        if (smartAlarmDeviceOptional.isPresent()) {
+            SmartAlarmDevice smartAlarmDevice = smartAlarmDeviceOptional.get();
+            smartAlarmDeviceRepository.delete(smartAlarmDevice);
+        }
     }
+
 }

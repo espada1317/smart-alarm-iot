@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -46,6 +46,6 @@ public class User {
 
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL)
-    private Set<SmartAlarmDevice> smartAlarms = new HashSet<>();
+    private List<SmartAlarmDevice> smartAlarms = new ArrayList<>();
 
 }

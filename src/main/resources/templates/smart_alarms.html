@@ -32,11 +32,17 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-sm btn-outline-secondary btn-black"
-                                       th:ref="@{/smartAlarm/getById/{id}(id=${smartAlarm.id})}">View SmartAlarm</a>
+                                       th:href="@{/alarms/{id}(id=${smartAlarm.deviceMacId})}">View SmartAlarm</a>
                                 </div>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary btn-sm btn-outline-secondary btn-red"
-                                       th:ref="@{/smartAlarm/getById/{id}(id=${smartAlarm.id})}">Delete device</a>
+                                    <form method="POST" th:action="@{/smartAlarm/delete/{id}(id=${smartAlarm.id})}"
+                                          th:object="${smartAlarmInfo}">
+                                        <input type="text" name="deviceMacId" th:value="${deviceMacId}" readonly
+                                               style="display: none;">
+                                        <button type="submit" class="btn btn-primary submit-cancel btn-red">Delete
+                                            device
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

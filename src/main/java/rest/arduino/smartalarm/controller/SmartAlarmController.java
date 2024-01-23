@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import rest.arduino.smartalarm.application.exception.ValidationCustomException;
@@ -16,8 +17,8 @@ import rest.arduino.smartalarm.domain.entity.SmartAlarmDevice;
 import rest.arduino.smartalarm.domain.entity.User;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/smartAlarm")
@@ -31,11 +32,10 @@ public class SmartAlarmController {
     @GetMapping
     public String getAllSmartAlarmDevices(Principal principal,
                                           Model model) {
-        Set<SmartAlarmDevice> smartAlarmDevices = null;
+        List<SmartAlarmDevice> smartAlarmDevices = null;
 
         if (principal != null) {
             Optional<User> response = userService.getUserByNickname(principal.getName());
-
             if (response.isPresent()) {
                 smartAlarmDevices = response.get().getSmartAlarms();
             }
@@ -55,6 +55,12 @@ public class SmartAlarmController {
             return "redirect:/smartAlarm?error";
         }
         return "redirect:/smartAlarm?success";
+    }
+
+    @PostMapping(value = "/delete/{id}")
+    public String deleteAlarm(@PathVariable("id") Long id) {
+        smartAlarmDeviceService.deleteSmartAlarmDevice(id);
+        return "redirect:/smartAlarm";
     }
 
 }

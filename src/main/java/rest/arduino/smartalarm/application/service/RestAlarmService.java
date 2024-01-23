@@ -13,16 +13,18 @@ public interface RestAlarmService {
 
     List<Alarm> getAllTodayAlarms();
 
-    List<Alarm> getTodayActiveAlarms();
-
     Alarm getNextActiveAlarm();
 
-    Alarm addAlarm(CreationAlarmDto creationAlarmDto);
+    void addAlarm(CreationAlarmDto creationAlarmDto, String username);
+
+    void deleteAlarm(Long alarmId);
 
     Alarm cancelCurrentAlarm();
 
     PhotoSensor addPhotoSensorValue(SensorValueDto sensorValueDto);
 
     Boolean verifyCurrentAlarm();
+
+    List<Alarm> getAllAlarmsByUserAndDeviceMacId(String deviceMacId, String nickname);
 
 }

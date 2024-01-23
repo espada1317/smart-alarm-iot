@@ -1,15 +1,11 @@
 package rest.arduino.smartalarm.domain.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import rest.arduino.smartalarm.domain.deserializer.CustomDateTimeDeserializer;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,7 +15,10 @@ import java.time.LocalDateTime;
 @ToString
 public class CreationAlarmDto {
 
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    private LocalDateTime alarmTime;
+    private Integer hour;
+
+    private Integer minute;
+
+    private String deviceMacId;
 
 }

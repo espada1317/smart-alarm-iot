@@ -1,5 +1,6 @@
 package rest.arduino.smartalarm.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,7 +38,7 @@ public class Alarm {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "smart_alarm_device_id")
     private SmartAlarmDevice smartAlarmDevice;
 
