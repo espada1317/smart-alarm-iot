@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <canvas id="connectedScatterChartPhoto" style="max-height: 45vh;"></canvas>
+        </div>
+        <div class="col-md-9">
+            <canvas id="connectedScatterChartSound" style="max-height: 45vh;"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-XPMkOmL+2eGK8eKebmUiK6U8dvIueRci1nBPcR5w5lF2iXPdz+ILwkQ4iQNt6tNL"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyO2RmaYmCcDdQp4J2rmiq7YyJOMwL2ys"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script th:inline="javascript">
+    var scatterPhotoData = /*[[${scatterPhotoData}]]*/ [];
+    var scatterSoundData = /*[[${scatterSoundData}]]*/ [];
+
+    var ctxConnectedPhoto = document.getElementById('connectedScatterChartPhoto').getContext('2d');
+    var ctxConnectedSound = document.getElementById('connectedScatterChartSound').getContext('2d');
+
+    var connectedScatterChartPhoto = new Chart(ctxConnectedPhoto, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'PhotoSensor data',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                data: scatterPhotoData,
+                showLine: true,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'category',
+                    position: 'bottom'
+                },
+                y: {
+                    type: 'linear',
+                    position: 'left'
+                }
+            }
+        }
+    });
+
+    var connectedScatterChartSound = new Chart(ctxConnectedSound, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'SoundSensor data',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                data: scatterSoundData,
+                showLine: true,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'category',
+                    position: 'bottom'
+                },
+                y: {
+                    type: 'linear',
+                    position: 'left'
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

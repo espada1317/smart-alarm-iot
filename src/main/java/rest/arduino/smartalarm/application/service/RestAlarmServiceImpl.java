@@ -159,6 +159,9 @@ public class RestAlarmServiceImpl implements RestAlarmService {
     @Override
     public Boolean verifyCurrentAlarm(String deviceMacId) {
         LocalTime currentTime = LocalDateTime.now().toLocalTime();
+        if (getNextActiveAlarm(deviceMacId) == null) {
+            return false;
+        }
         LocalTime alarmTime = getNextActiveAlarm(deviceMacId).getAlarmDateTime().toLocalTime();
 
         int currentHour = currentTime.getHour();

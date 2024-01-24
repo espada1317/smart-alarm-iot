@@ -29,7 +29,7 @@ public class AlarmController {
     public String getAllAlarmsForDeviceId(@PathVariable("deviceMacId") String deviceMacId,
                                           Principal principal,
                                           Model model) {
-        List<Alarm> alarms = null;
+        List<Alarm> alarms = List.of();
         if (principal != null) {
             alarms = restAlarmService.getAllAlarmsByUserAndDeviceMacId(deviceMacId, principal.getName());
         }
