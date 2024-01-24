@@ -27,8 +27,8 @@ public class WebSecurityConfig {
                                 requests
                                         .requestMatchers("/css/**", "/sigIn", "/signUp")
                                         .permitAll()
-                                        .requestMatchers("/photos")
-                                        .hasAuthority("USER")
+                                        .requestMatchers("/rest/**")
+                                        .permitAll()
                                         .anyRequest()
                                         .authenticated()
                 )

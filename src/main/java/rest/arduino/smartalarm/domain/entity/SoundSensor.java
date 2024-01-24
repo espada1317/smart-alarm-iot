@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,36 +16,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "smart_alarm_device")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
-public class SmartAlarmDevice {
+@ToString
+
+@Entity
+@Table(name = "sound_sensor")
+public class SoundSensor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(nullable = false,
-            unique = true)
-    private String deviceMacId;
+    @Column(name = "creation_timestamp", nullable = false)
+    private LocalDateTime creationTimestamp;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "value")
+    private Integer value;
 
-    @OneToMany(cascade = CascadeType.REMOVE,
-            mappedBy = "smartAlarmDevice")
-    private List<Alarm> alarms;
-
-    @OneToMany(cascade = CascadeType.REMOVE,
-            mappedBy = "smartAlarmDevice")
-    private List<PhotoSensor> photoSensors;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "smart_alarm_device_id")
+    private SmartAlarmDevice smartAlarmDevice;
 
 }

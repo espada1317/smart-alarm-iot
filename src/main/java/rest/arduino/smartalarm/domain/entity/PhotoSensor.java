@@ -1,10 +1,13 @@
 package rest.arduino.smartalarm.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,5 +38,9 @@ public class PhotoSensor {
 
     @Column(name = "value")
     private Integer value;
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "smart_alarm_device_id")
+    private SmartAlarmDevice smartAlarmDevice;
 
 }

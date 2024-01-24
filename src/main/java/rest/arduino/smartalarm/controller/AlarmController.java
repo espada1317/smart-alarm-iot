@@ -57,4 +57,11 @@ public class AlarmController {
         return "redirect:/alarms/" + creationAlarmDto.getDeviceMacId();
     }
 
+    @PostMapping("/{deviceMacId}/enablement/{id}")
+    public String changeEnablementOfAlarm(@PathVariable("deviceMacId") String deviceMacId,
+                                          @PathVariable("id") Long id) {
+        restAlarmService.changeEnablementOfAlarm(deviceMacId, id);
+        return "redirect:/alarms/" + deviceMacId;
+    }
+
 }

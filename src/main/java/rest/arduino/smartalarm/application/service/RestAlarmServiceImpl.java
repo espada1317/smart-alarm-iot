@@ -7,11 +7,13 @@ import rest.arduino.smartalarm.domain.dto.SensorValueDto;
 import rest.arduino.smartalarm.domain.entity.Alarm;
 import rest.arduino.smartalarm.domain.entity.PhotoSensor;
 import rest.arduino.smartalarm.domain.entity.SmartAlarmDevice;
+import rest.arduino.smartalarm.domain.entity.SoundSensor;
 import rest.arduino.smartalarm.domain.entity.User;
 import rest.arduino.smartalarm.domain.enums.AlarmStatus;
 import rest.arduino.smartalarm.domain.repository.AlarmRepository;
 import rest.arduino.smartalarm.domain.repository.PhotoSensorRepository;
 import rest.arduino.smartalarm.domain.repository.SmartAlarmDeviceRepository;
+import rest.arduino.smartalarm.domain.repository.SoundSensorRepository;
 import rest.arduino.smartalarm.domain.repository.UserRepository;
 
 import java.time.LocalDate;
@@ -34,25 +36,20 @@ public class RestAlarmServiceImpl implements RestAlarmService {
 
     private final PhotoSensorRepository photoSensorRepository;
 
+    private final SoundSensorRepository soundSensorRepository;
+
     @Override
     public List<Alarm> getAllAlarms() {
         return alarmRepository.findAll();
     }
 
     @Override
-    public List<Alarm> getAllTodayAlarms() {
-        return getAllAlarms().stream()
-                .filter(alarm -> alarm.getAlarmDateTime().toLocalDate().equals(LocalDate.now()))
-                .sorted(Comparator.comparing(Alarm::getAlarmDateTime,
-                        Comparator.nullsLast(Comparator.naturalOrder())))
-                .toList();
-    }
-
-    @Override
-    public Alarm getNextActiveAlarm() {
+    public Alarm getNextActiveAlarm(String deviceMacId) {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         return getAllAlarms().stream()
+                .filter(alarm -> alarm.getSmartAlarmDevice() != null)
+                .filter(alarm -> alarm.getSmartAlarmDevice().getDeviceMacId().equals(deviceMacId))
                 .filter(alarm -> alarm.getStatus().equals(AlarmStatus.ACTIVE))
                 .filter(alarm ->
                         (alarm.getAlarmDateTime().toLocalDate().equals(LocalDate.now()) &&
@@ -105,8 +102,8 @@ public class RestAlarmServiceImpl implements RestAlarmService {
     }
 
     @Override
-    public Alarm cancelCurrentAlarm() {
-        Alarm currentAlarm = getNextActiveAlarm();
+    public Alarm cancelCurrentAlarm(String deviceMacId) {
+        Alarm currentAlarm = getNextActiveAlarm(deviceMacId);
         if (currentAlarm.getAlarmDateTime().toLocalDate().equals(LocalDate.now())
                 && currentAlarm.getAlarmDateTime().toLocalTime().getHour() == LocalTime.now().getHour()
                 && currentAlarm.getAlarmDateTime().toLocalTime().getMinute() == LocalTime.now().getMinute()) {
@@ -118,18 +115,51 @@ public class RestAlarmServiceImpl implements RestAlarmService {
     }
 
     @Override
-    public PhotoSensor addPhotoSensorValue(SensorValueDto sensorValueDto) {
+    public void changeEnablementOfAlarm(String deviceMacId, Long id) {
+        Optional<Alarm> alarmOptional = alarmRepository.findById(id);
+        if (alarmOptional.isPresent()) {
+            Alarm alarm = alarmOptional.get();
+            if (alarm.getSmartAlarmDevice().getDeviceMacId().equals(deviceMacId)) {
+                alarm.setStatus(alarm.getStatus().equals(AlarmStatus.ACTIVE) ? AlarmStatus.DISABLED : AlarmStatus.ACTIVE);
+            }
+            alarmRepository.save(alarm);
+        }
+    }
+
+    @Override
+    public PhotoSensor addPhotoSensorValue(String deviceMacId, SensorValueDto sensorValueDto) {
         PhotoSensor photoSensor = new PhotoSensor();
         photoSensor.setCreationTimestamp(LocalDateTime.now());
         photoSensor.setValue(Integer.parseInt(sensorValueDto.getSensorValue().trim()));
+
+        Optional<SmartAlarmDevice> smartAlarmDeviceOptional = smartAlarmDeviceRepository.findSmartAlarmDeviceByDeviceMacId(deviceMacId);
+        if (smartAlarmDeviceOptional.isPresent()) {
+            SmartAlarmDevice smartAlarmDevice = smartAlarmDeviceOptional.get();
+            photoSensor.setSmartAlarmDevice(smartAlarmDevice);
+        }
 
         return photoSensorRepository.save(photoSensor);
     }
 
     @Override
-    public Boolean verifyCurrentAlarm() {
+    public SoundSensor addSoundSensorValue(String deviceMacId, SensorValueDto sensorValueDto) {
+        SoundSensor soundSensor = new SoundSensor();
+        soundSensor.setCreationTimestamp(LocalDateTime.now());
+        soundSensor.setValue(Integer.parseInt(sensorValueDto.getSensorValue().trim()));
+
+        Optional<SmartAlarmDevice> smartAlarmDeviceOptional = smartAlarmDeviceRepository.findSmartAlarmDeviceByDeviceMacId(deviceMacId);
+        if (smartAlarmDeviceOptional.isPresent()) {
+            SmartAlarmDevice smartAlarmDevice = smartAlarmDeviceOptional.get();
+            soundSensor.setSmartAlarmDevice(smartAlarmDevice);
+        }
+
+        return soundSensorRepository.save(soundSensor);
+    }
+
+    @Override
+    public Boolean verifyCurrentAlarm(String deviceMacId) {
         LocalTime currentTime = LocalDateTime.now().toLocalTime();
-        LocalTime alarmTime = getNextActiveAlarm().getAlarmDateTime().toLocalTime();
+        LocalTime alarmTime = getNextActiveAlarm(deviceMacId).getAlarmDateTime().toLocalTime();
 
         int currentHour = currentTime.getHour();
         int currentMinute = currentTime.getMinute();

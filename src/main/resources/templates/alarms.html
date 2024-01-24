@@ -30,16 +30,27 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-3" th:each="alarm: ${alarms}">
-                    <div class="card mb-1 box-shadow">
+                    <div class="card mb-1 box-shadow card-alarm">
                         <div class="card-body">
                             <p class="card-text">
                                 <span th:text="${alarm.getAlarmDateTime().toLocalDate()}"
                                       style="margin-right: 145px;"></span>
                                 <span th:text="${alarm.getAlarmDateTime().toLocalTime()}"></span>
+                                <p>
+                                    <form method="POST" th:action="@{'/alarms/' + ${deviceMacId} + '/enablement/' + ${alarm.getId()}}">
+                                        <span class="sw-span">DISABLED</span>
+                                        <label class="switch">
+                                            <input type="checkbox" th:checked="${alarm.getStatus() == T(rest.arduino.smartalarm.domain.enums.AlarmStatus).ACTIVE}"
+                                                   th:onchange="'submitForm(\'submitButton__' + ${alarm.getId()} + '\')'">
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <button type="submit" th:id="'submitButton__' + ${alarm.getId()}" style="display:none;"></button>
+                                    <span class="sw-span">ACTIVE</span>
+                                    </form>
+                                </p>
                             </p>
                             <div class="d-flex justify-content-between align-items-center" style="margin-left: 85px;">
-                                <form method="POST" th:action="@{/alarms/delete/{id}(id=${alarm.id})}"
-                                      th:object="${smartAlarmInfo}">
+                                <form method="POST" th:action="@{/alarms/delete/{id}(id=${alarm.id})}">
                                     <input type="text" name="deviceMacId" th:value="${deviceMacId}" readonly
                                            style="display: none;">
                                     <button type="submit" class="btn btn-primary submit-cancel btn-red">Delete alarm
@@ -54,6 +65,12 @@
     </div>
 
 </main>
+
+<script>
+    function submitForm(buttonId) {
+        document.getElementById(buttonId).click();
+    }
+</script>
 
 </body>
 </html>
