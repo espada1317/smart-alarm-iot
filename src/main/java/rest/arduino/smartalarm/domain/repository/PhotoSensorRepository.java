@@ -15,11 +15,15 @@ public interface PhotoSensorRepository extends JpaRepository<PhotoSensor, Long> 
                 CAST(ROUND(AVG(ps.value)) AS INTEGER) AS averageValue
             FROM
                 photo_sensor ps
+            JOIN
+                smart_alarm_device sad ON sad.id = ps.smart_alarm_device_id
+            WHERE
+                sad.device_mac_id = :deviceMacId
             GROUP BY
                 TO_CHAR(ps.creation_timestamp, 'YYYY-MM-DD HH24:MI')
             ORDER BY
                 TO_CHAR(ps.creation_timestamp, 'YYYY-MM-DD HH24:MI');
             """)
-    List<Map<String, Object>> getAverageValuesByMinute();
+    List<Map<String, Object>> getAverageValuesByMinute(String deviceMacId);
 
 }

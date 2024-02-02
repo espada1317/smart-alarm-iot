@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import rest.arduino.smartalarm.domain.dto.ScatterChartPoint;
 import rest.arduino.smartalarm.domain.repository.SoundSensorRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +19,8 @@ public class SoundSensorServiceImpl implements SoundSensorService {
     private final SoundSensorRepository soundSensorRepository;
 
     @Override
-    public List<ScatterChartPoint> getSoundSensorStatisticByMinute() {
-        var averageValuesByMinute = soundSensorRepository.getAverageValuesByMinute();
+    public List<ScatterChartPoint> getSoundSensorStatisticByMinute(String deviceMacId, Integer fromHour, Integer toHour, LocalDate localDate) {
+        var averageValuesByMinute = soundSensorRepository.getAverageValuesByMinute(deviceMacId);
 
         List<ScatterChartPoint> soundSensorStatisticDtoList = new ArrayList<>();
         for (var map : averageValuesByMinute) {
@@ -34,7 +37,23 @@ public class SoundSensorServiceImpl implements SoundSensorService {
             soundSensorStatisticDtoList.add(photoSensorStatisticDto);
         }
 
-        return soundSensorStatisticDtoList;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDate yesterday = localDate.minusDays(1);
+
+        LocalDateTime fromDateTime;
+        LocalDateTime toDateTime = LocalDateTime.parse(localDate + " " + String.format("%02d", toHour) + ":00", formatter);
+        var soundDataStream = soundSensorStatisticDtoList.stream();
+
+        if (fromHour < toHour) {
+            fromDateTime = LocalDateTime.parse(localDate + " " + String.format("%02d", fromHour) + ":00", formatter);
+        } else {
+            fromDateTime = LocalDateTime.parse(yesterday + " " + String.format("%02d", fromHour) + ":00", formatter);
+        }
+
+        soundDataStream = soundDataStream.filter(soundData -> LocalDateTime.parse(soundData.getX(), formatter).isAfter(fromDateTime)
+                && LocalDateTime.parse(soundData.getX(), formatter).isBefore(toDateTime));
+
+        return soundDataStream.toList();
     }
 
 }

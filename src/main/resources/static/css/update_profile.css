@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Texturina:wght@300&display=swap');
+
+body {
+    color: #fff;
+    background: #fff;
+}
+
+.account-settings .user-profile {
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+
+.account-settings .user-profile .user-avatar {
+    margin: 0 0 1rem 0;
+}
+
+.account-settings .user-profile .user-avatar img {
+    border-radius: 0px;
+    width: 80%;
+    margin-bottom: 15px;
+}
+
+.account-settings .user-profile h5.user-name {
+    margin: 0 0 0.5rem 0;
+}
+
+.account-settings .user-profile h6.user-email {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.account-settings .about {
+    margin: 1rem 0 0 0;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.card {
+    background: #000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 0;
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background: #fff;
+    color: #000;
+}
+
+.back-ch {
+    color: #d93b3b;
+}
+
+#submit {
+    background-color: #fff;
+    color: #000;
+    font-weight: 700;
+    border: 1px solid #000;
+}
+
+.submit-cancel {
+    color: #fff;
+    font-weight: 700;
+    border: 1px solid #fff;
+    background-color: #d93b3b;
+}
+
+.text-right-modified {
+    margin-top: 30px;
+}
+
+#text {
+    resize: none;
+    margin-botton:10px;
+}
+
+#count_message {
+    color: #fff;
+}
+
+.main-pages {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    background: #171717;
+}
+
+.page {
+    margin: 0;
+    height: 100%;
+    width: 130px;
+    display: flex;
+    flex-direction: column;
+    weight: 350px;
+    align-items: center;
+    justify-content: center;
+    background: #292726;
+    font-family: 'Texturina', sans-serif;
+}
+
+.page a {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.page:hover {
+    opacity: .7;
+}
+
+.page a:hover{
+    color: #d93b3b;
+}
+
+#index-page {
+    font-family: 'Grenze Gotisch', cursive;
+    font-size: 45px;
+    background: #171717;
+}
+
+a.navbar-brand {
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.navbar-brand img {
+    height: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2px;
+}
+
+#index-logo {
+    background: #171717;
+    margin: 0 30px;
+}
+
+.selected-main-page {
+    color: orange;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+p.filename {
+    font-size: 12px;
+}
+
+#index-logo {
+    background: #171717;
+    margin: 0 30px;
+    width: 300px;
+}

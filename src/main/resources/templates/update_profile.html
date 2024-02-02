@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile settings</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/update_profile.css}">
+</head>
+<body>
+
+<header th:insert="fragments/navbar :: navbar">
+</header>
+
+<div class="container">
+    <div class="row gutters">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="account-settings">
+                        <div class="user-profile">
+                            <h5 class="user-name" th:if="${principalName != null}" th:text="${principalName}"></h5>
+                            <h6 class="user-email" th:if="${userDetails != null}" th:text="${userDetails.email}"></h6>
+                            <div class="about">
+                                <h5 class="mb-2 back-ch">About</h5>
+                                <p th:if="${userDetails != null}"
+                                   th:text="' You track night time of sleep from ' + ${userDetails.fromHour != null ? userDetails.fromHour : 'None'} + ' to ' + ${userDetails.toHour != null ? userDetails.toHour : 'None'}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+                <form method="POST" th:action="@{/updateProfileText}" th:object="${userSettingsDto}">
+                    <div class="card-body">
+                        <div class="alert alert-success text-center" role="alert" th:if="${param.success}">
+                            Account successfully updated.
+                        </div>
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-3 back-ch">Personal Details</h6>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="eMail">Email</label>
+                                    <input type="email" class="form-control" id="eMail" name="email"
+                                           placeholder="Enter email" th:value="${userDetails.email}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-3 back-ch">Sleeping tracking interval</h6>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="fromHour">From hour</label>
+                                    <input type="number" class="form-control" id="fromHour" name="fromHour" min="0" max="23"
+                                           placeholder="Enter From Hour"
+                                           th:value="${userDetails.fromHour != null ? userDetails.fromHour : ''}">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="toHour">To hour</label>
+                                    <input type="number" class="form-control" id="toHour" name="toHour" min="0" max="23"
+                                           placeholder="Enter To Hour"
+                                           th:value="${userDetails.toHour != null ? userDetails.toHour : ''}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="text-right text-right-modified">
+                                    <button type="submit" name="action" value="update" id="submit"
+                                            class="btn btn-primary">Update
+                                    </button>
+                                    <button type="submit" name="action" value="cancel"
+                                            class="btn btn-secondary submit-cancel">Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -38,6 +38,12 @@ public class User {
             unique = true)
     private String email;
 
+    @Column
+    private Integer fromHour;
+
+    @Column
+    private Integer toHour;
+
     @Column(nullable = false)
     private String password;
 
